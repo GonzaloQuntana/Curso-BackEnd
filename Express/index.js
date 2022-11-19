@@ -3,8 +3,7 @@ let moment = require ('moment');
 let fs = require ('fs');
 const PORT = 8080;
 let app = express();
-
-// let productos = require('./productos.json');
+let productos = require('./productos.json');
 // app.all("/", (req, res, next)=>{
 //     res.send("Estoy en el metodo ALL de express");
 // });
@@ -22,17 +21,21 @@ app.get("/", (req, res, next)=>{
 });
 
 app.get("/products", (req, res, next)=>{
-    res.send({productos});
+    res.send(productos);
 });
 
 app.get("/randomproduct", (req, res, next)=>{
-    var prandom = fs.readFileSync(productos);
+    var prandom = fs.readFileSync('Express/productos.json');
     var producto2 = JSON.parse(prandom);
   
-    var randomNum = Math.round(Math.random() * (1 + 6) - 1);
+    var randomNum = Math.floor(Math.random() * producto2.length);
     var producto = producto2[randomNum];
 
-    res.send({producto});
+    console.log(producto);
+    console.log(producto[randomNum]);
+    
+    res.json(producto);
+
 });
 
 app.get("/fyh", (req, res, next)=>{

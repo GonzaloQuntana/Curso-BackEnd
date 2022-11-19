@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Lapiz",
+    "price": 80,
+    "thumbnail": "http://www.trabi-carti.com.ar/wp-content/uploads/362-562x600.jpg",
+    "id": 1
+  },
+  {
+    "title": "Goma",
+    "price": 120,
+    "thumbnail": "https://www.papelerabariloche.com.ar/img/p/163214/1.jpeg?quality=95&width=800&height=800&mode=max&upscale=false&format=webp",
+    "id": 2
+  },
+  {
+    "title": "Hojas",
+    "price": 120,
+    "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/156/488/products/america-rayado-48-h1-0b9b683327e29395fe16461475890426-640-0.jpg",
+    "id": 3
+  }
+]
