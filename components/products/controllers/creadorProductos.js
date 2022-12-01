@@ -1,7 +1,7 @@
 const Contenedor = require("./manejoArchivos.js");
 const productos = new Contenedor("./productos.json");
 const productos1 = {
-  title: "Lapiz", 
+  title: "Lapiz",
   price: 80,
   thumbnail:
     "http://www.trabi-carti.com.ar/wp-content/uploads/362-562x600.jpg",
