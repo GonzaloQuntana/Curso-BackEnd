@@ -3,7 +3,10 @@ const CORS = require('cors');
 const PORT = 8080;
 let app = express();
 const routerApi = require('./routes');
-const { logErrors, errorHandler } = require('./middlewares/errorHandler');
+const { logErrors, errorHandler } = require('./utils/middlewares/errorHandler');
+let {Server: HttpServer} = require('http');
+let Socket = require('./utils/sockets');
+let path = require('path');
 
 app.get('/', inicio);
 
@@ -18,10 +21,19 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(CORS("*"));
  
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 routerApi(app);
 
-app.use(logErrors);
-app.use(errorHandler);
+let httpServer = new HttpServer(app);
 
-app.listen(PORT, ()=> console.log(`http:localhost:${PORT}`));
+let socket = new Socket(httpServer);
+socket.init();
+
+// app.use(logErrors);
+// app.use(errorHandler);
+
+
+httpServer.listen(PORT, ()=> console.log(`http:localhost:${PORT}`));
 
