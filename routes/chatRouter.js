@@ -4,9 +4,9 @@ const router = express.Router();
 
 router.get('/', inicio);
 
-function inicio (peticion, resultado)
+function inicio (peticion, res)
 {
-   resultado.sendFile(__dirname + "/chat.html");
+   res.render("index",{response:"Ok!"});
 }
 
  module.exports = router; 

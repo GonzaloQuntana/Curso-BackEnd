@@ -21,8 +21,8 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(CORS("*"));
  
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 routerApi(app);
 

@@ -1,79 +1,88 @@
-let {Server: SocketIO} = require('socket.io');
-
+let {Server: SocketIO} = require("socket.io");
 class Socket{
-    static instance;
+    static instancia;
     constructor(http){
-        if(Socket.instance){
-            return Socket.instance;
-        }
-        Socket.instance = this;
-        this.io = new SocketIO(http);
-        this.messages = "";
-        this.users = [];
-    };
+      if(Socket.instancia){
+        return Socket.instancia;
+      }
+      Socket.instancia = this;
+      this.io = new SocketIO(http);
+      this.mensajes = [];
+      this.usuarios = [];
+    }
     init(){
-        try {
-            this.io.on('connection', socket =>{
-                console.log('¡Usuario Conectado!')
-                this.io.sockets.emit('init', this.messages);
-                
-                socket.on('message', data =>{
-                    this.messages.push(data);
-                    this.io.sockets.emit('listenServer', data);
-                });
+      try {
+        this.io.on('connection', socket =>{
+          console.log("Usuario conectado!");
+          this.io.sockets.emit("init", this.mensajes);
 
-                socket.on('addUser', data =>{
-                    if(this.users.length){
-                        let user_verification = false;
-                        this.users = this.users.map(user =>{
-                            if(user.email == data.email){
-                                user_verification = true;
-                                return {
-                                    id: socket.id,
-                                    ...data,
-                                    active:true
-                                };
-                            };
-                        });
-                if(!user_verification){
-                    this.usuarios.push({
-                        id: socket.id,
-                        ...data,
-                        active:true
-                    });
-                    };
-                }else {
-                    this.usuarios.push({
-                        id: socket.id,
-                        ...data,
-                        active:true
-                    });
-                    };
-                    // this.messages.push(data);
-                    this.io.sockets.emit('loadUsers', this.usuarios);
-                });
-            });
+          // Escuchamos el mensaje de un usuario y lo emitimos a todos los conectados
+          socket.on("mensaje", data =>{
+            this.mensajes.push(data);
+            this.io.sockets.emit("listenserver", this.mensajes);
+          });
 
-            socket.on('disconnect', data =>{
-                console.log('Se desconectó', socket.id);
-                this.users = this.users.map(user =>{
-                    if(user.id == socklet.id){
-                        delete user.active;
-                        return {
-                            ...user,
-                            active:false
-                };
-                    }else {
-                        return user;
+          socket.on("addUser", data =>{
+            console.log(data);
+            if(this.usuarios.length){
+              let verificacion_user = false;
+              this.usuarios = this.usuarios.map(usuario =>{
+                if(usuario.email == data.email){
+                  verificacion_user = true;
+                  return {
+                    id: socket.id,
+                    ...data,
+                    active: true
+                  }
+                }else{
+                  return usuario;
                 }
-            });
-            this.io.sockets.emit('loadUsers', this.usuarios);
-            });
+              })
+              if(!verificacion_user){
+                this.usuarios.push({
+                  id: socket.id,
+                  ...data,
+                  active: true
+                })
+              }
+            }else{
+              this.usuarios.push({
+                id: socket.id,
+                ...data,
+                active: true
+              })
+            }
+            // this.mensajes.push(data);
+            this.io.sockets.emit("loadUsers", this.usuarios);
+          });
 
-        } catch (error) {
-            console.log(error);
-        };
-    };
-};
+          socket.on("disconnect", () =>{
+            console.log("Se desconectó ", socket.id);
+            this.usuarios = this.usuarios.map(usuario =>{
+              if(usuario.id == socket.id){
+                delete usuario.active;
+                return {
+                  ...usuario,
+                  active: false
+                }
+              }else{
+                return usuario;
+              }
+            });            
+            this.io.sockets.emit("loadUsers", this.usuarios);
+          })
+
+          // socket.emit("init", socket.id);
+          // socket.on("keyup", data =>{
+          //   this.mensajes = data;
+          //   this.io.sockets.emit("fillP", data);
+          // });
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+}
+
 
 module.exports = Socket;
